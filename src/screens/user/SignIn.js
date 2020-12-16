@@ -24,7 +24,11 @@ import Success from '../../components/views/Success';
 import CameraView from '../../components/CameraView';
 import Loader from '../../components/loader/Loader';
 import { baseUrl, setToken, setRefresheToken, setIsFirst, setUserId, processResponse } from '../../utilities';
-
+import {
+    getLocation,
+    geocodeLocationByName,
+    geocodeAddressByName
+  } from '../../utilities/locationService';
 
 export default class SignInScreen extends Component {
     constructor(props) {
@@ -36,12 +40,23 @@ export default class SignInScreen extends Component {
             image1_display: '',
             is_valide_mail: false,
             done: false,
-            show_camera: false
+            show_camera: false,
+            latitude: 6.5244,
+            longitude: 3.3792,
         };
     }
 
     async componentDidMount() {
-
+        var cordinates = getLocation();
+        cordinates.then((result) => {
+          this.setState({
+            latitude: result.latitude,
+            longitude: result.longitude
+          });
+          console.log(result);
+        }, err => {
+          console.log(err);
+        });
     }
 
 

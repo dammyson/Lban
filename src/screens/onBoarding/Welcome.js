@@ -45,7 +45,9 @@ export default class Welcome extends React.Component {
             [
                 PermissionsAndroid.PERMISSIONS.CAMERA,
                 PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                //PermissionsAndroid.PERMISSIONS.ACCESS_COURSE_LOCATION,
+                //PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             ]
         );
         this.props.navigation.replace('SignIn')
@@ -75,7 +77,7 @@ export default class Welcome extends React.Component {
             color={colors.primary_color}
 
           />
-          <Text style={{ color: colors.primary_color, fontFamily: 'Poppins-Bold', fontSize: 20, marginBottom: 2, marginTop: 2 }}>  NAME HERE</Text>
+          <Text style={{ color: colors.primary_color, fontFamily: 'Poppins-Bold', fontSize: 20, marginBottom: 2, marginTop: 2 }}>NAME HERE</Text>
 
         </View>
         <Animatable.View
@@ -89,7 +91,7 @@ export default class Welcome extends React.Component {
           }]}>Stay connected with everyone!</Text>
           <Text style={styles.text}>Sign in with account</Text>
           <View style={styles.button}>
-            <TouchableOpacity onPress={() =>  this.requestMultiplePermission()}>
+            <TouchableOpacity onPress={() =>this.requestMultiplePermission()}>
               <LinearGradient
                 colors={[colors.primary_color, colors.primary_color]}
                 style={styles.signIn}
