@@ -8,6 +8,7 @@ import {
     StyleSheet,
     StatusBar,
     Alert,
+    Keyboard,
     ImageBackground,
     Dimensions
 } from 'react-native';
@@ -39,6 +40,7 @@ export default class SignInScreen extends Component {
             image1: '',
             image1_display: '',
             image2: '',
+            password:'',
             image2_display: '',
             is_valide_mail: false,
             secureTextEntry: false,
@@ -70,8 +72,8 @@ export default class SignInScreen extends Component {
     }
 
     processStepOne() {
-        const { email, phone, lname, fname, is_valide_mail, agree, image1, image2 } = this.state
-        if (email == "" || phone == "" || lname == "" || fname == '') {
+        const { email, phone, lname, fname, is_valide_mail, agree, password, image1, image2 } = this.state
+        if (email == "" || phone == "" || lname == "" || fname == ''|| password == '') {
             Alert.alert('Validation failed', 'Field cannot be empty', [{ text: 'Okay' }])
             return
         }
@@ -88,10 +90,13 @@ export default class SignInScreen extends Component {
             return
         }
         var payload = {
-            FirstName: fname,
-            LastName: lname,
+            firstName: fname,
+            fastName: lname,
+            email: email,
+            password: phone,
             PhoneNumber: phone,
             Identity: email,
+            confirmPassword: phone,
             TrainingImage1: image1,
             TrainingImage2: image2
 
@@ -99,7 +104,7 @@ export default class SignInScreen extends Component {
         var formData = JSON.stringify(payload);
 
         this.setState({ loading: true })
-        fetch(baseUrl() + 'registration', {
+        fetch(baseUrl() + 'api/facecog/registration', {
             method: 'POST', headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -108,10 +113,12 @@ export default class SignInScreen extends Component {
             .then(processResponse)
             .then(res => {
                 const { statusCode, data } = res;
+                console.warn(statusCode, data );
                 this.setState({ loading: false })
                 if (statusCode === 200) {
                     setToken(email)
-                    this.setState({ loading: false, done: true })
+                    this.setState({ loading: false,})
+                    this.props.navigation.replace('SignIn')
                 } else if (statusCode === 500) {
                     alert(data.message)
                 } else if (statusCode === 400) {
@@ -149,7 +156,7 @@ export default class SignInScreen extends Component {
     render() {
         if (this.state.loading) {
             return (
-                <Loader  message={'Proccessing Registration...'}/>
+                <Loader message={'Proccessing Registration...'} />
             );
         }
 
@@ -177,11 +184,50 @@ export default class SignInScreen extends Component {
 
                                     <View style={styles.input}>
                                         <TextInput
+                                            placeholder="Email "
+                                            placeholderTextColor={colors.placeholder_color}
+                                            returnKeyType="next"
+                                            keyboardType='email-address'
+                                            autoCapitalize="none"
+                                            autoCorrect={false}
+                                            defaultValue={this.state.email}
+                                            style={{ flex: 1, fontSize: 12, color: colors.primary_color, fontFamily: 'Poppins-SemiBold', }}
+                                            onChangeText={(text) => this.validate(text)}
+                                            onSubmitEditing={() => this.passwordInput.focus()}
+                                        />
+                                    </View>
+
+
+                                    <View style={styles.operation_icon}>
+                                        {this.state.is_valide_mail ?
+                                            <Animatable.View
+                                                animation="bounceIn"
+                                            >
+                                                <Icon
+                                                    name="check-circle"
+                                                    color="green"
+                                                    size={20}
+                                                    type='feather'
+
+
+                                                />
+                                            </Animatable.View>
+                                            : null}
+
+                                    </View>
+                                </View>
+
+
+                                <View style={styles.textInputContainer}>
+
+                                    <View style={styles.input}>
+                                        <TextInput
                                             placeholder="Phone "
                                             placeholderTextColor={colors.placeholder_color}
                                             returnKeyType="next"
                                             keyboardType='default'
                                             autoCapitalize="none"
+
                                             autoCorrect={false}
                                             style={{ flex: 1, fontSize: 12, color: colors.primary_color, fontFamily: 'Poppins-SemiBold', }}
                                             onChangeText={(text) => this.setState({ phone: text })}
@@ -190,6 +236,25 @@ export default class SignInScreen extends Component {
                                     </View>
 
                                 </View>
+                                <View style={styles.textInputContainer}>
+                                  
+
+                                  <View style={styles.input}>
+                                      <TextInput
+                                          placeholder="Password"
+                                          placeholderTextColor={colors.placeholder_color}
+                                          secureTextEntry
+                                          returnKeyType="next"
+                                          onSubmitEditing={() => this.loginRequest()}
+                                          keyboardType='password'
+                                          autoCapitalize="none"
+                                          autoCorrect={false}
+                                          style={{ flex: 1, fontSize: 12, color: colors.primary_color, fontFamily: 'Poppins-SemiBold', }}
+                                          onChangeText={(text) => this.setState({password: text})}
+                                          onSubmitEditing={() => this.passwordInput.focus()}
+                                      />
+                                  </View>
+                              </View>
 
                                 <View style={styles.textInputContainer}>
                                     <View style={styles.input}>
@@ -227,13 +292,13 @@ export default class SignInScreen extends Component {
                                     </View>
 
                                 </View>
-
-                                <View style={{ flexDirection: 'row', marginRight: 30, marginLeft: 30, height: 100, marginTop: 20, marginBottom: 15 }}>
+                             
+                                <View style={{ flexDirection: 'row', marginRight: 30, marginLeft: 30, height: 100, marginTop: 10, marginBottom: 5 }}>
                                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
                                         <ImageBackground
                                             source={{ uri: this.state.image1_display }}
                                             imageStyle={{ borderRadius: 10, }}
-                                            style={{ backgroundColor: "#FFF", height: 100, width: 100, borderRadius: 10, borderWidth: 1, borderColor: colors.primary_color }}>
+                                            style={{ backgroundColor: "#FFF", height: 80, width: 80, borderRadius: 10, borderWidth: 1, borderColor: colors.primary_color }}>
                                             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
                                                 <TouchableOpacity style={{}} transparent onPress={() => this.pickSingle(1)}>
                                                     <Icon
@@ -256,7 +321,7 @@ export default class SignInScreen extends Component {
                                         <ImageBackground
                                             source={{ uri: this.state.image2_display }}
                                             imageStyle={{ borderRadius: 10, }}
-                                            style={{ backgroundColor: "#FFF", height: 100, width: 100, borderRadius: 10, borderWidth: 1, borderColor: colors.primary_color }}>
+                                            style={{ backgroundColor: "#FFF", height: 80, width: 80, borderRadius: 10, borderWidth: 1, borderColor: colors.primary_color }}>
                                             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
                                                 <TouchableOpacity style={{}} transparent onPress={() => this.pickSingle(2)}>
                                                     <Icon
@@ -277,6 +342,9 @@ export default class SignInScreen extends Component {
 
 
                                 </View>
+
+
+
                                 <View style={[styles.terms_container]}>
                                     {!this.state.agree ?
                                         <TouchableOpacity onPress={() => this.setState({ agree: true, show_terms_error: false })} style={[{ height: 15, width: 15, justifyContent: 'center', alignItems: 'center', }]}>
@@ -323,7 +391,6 @@ export default class SignInScreen extends Component {
 
 
                     </Content>
-                    {this.state.done ? this.success() : null}
                     {this.state.show_camera ? this.renderCameral() : null}
                 </Container>
 
@@ -390,10 +457,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginRight: 30,
         marginLeft: 30,
-        height: 45,
+        height: 42,
         borderColor: '#3E3E3E',
         marginBottom: 15,
-        marginTop: 20,
+        marginTop: 10,
         paddingLeft: 12,
         borderWidth: 0.6,
         borderColor: colors.primary_color,

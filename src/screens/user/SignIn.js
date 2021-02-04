@@ -23,12 +23,12 @@ import { navigation } from '../../../rootNavigation'
 import Success from '../../components/views/Success';
 import CameraView from '../../components/CameraView';
 import Loader from '../../components/loader/Loader';
-import { baseUrl, setToken, setRefresheToken, setIsFirst, setUserId, processResponse } from '../../utilities';
+import { baseUrl,setToken, setEmail, processResponse } from '../../utilities';
 import {
     getLocation,
     geocodeLocationByName,
     geocodeAddressByName
-  } from '../../utilities/locationService';
+} from '../../utilities/locationService';
 
 export default class SignInScreen extends Component {
     constructor(props) {
@@ -36,6 +36,7 @@ export default class SignInScreen extends Component {
         this.state = {
             loading: false,
             email: '',
+            password: '',
             image1: '',
             image1_display: '',
             is_valide_mail: false,
@@ -49,13 +50,13 @@ export default class SignInScreen extends Component {
     async componentDidMount() {
         var cordinates = getLocation();
         cordinates.then((result) => {
-          this.setState({
-            latitude: result.latitude,
-            longitude: result.longitude
-          });
-          console.log(result);
+            this.setState({
+                latitude: result.latitude,
+                longitude: result.longitude
+            });
+            console.log(result);
         }, err => {
-          console.log(err);
+            console.log(err);
         });
     }
 
@@ -76,29 +77,14 @@ export default class SignInScreen extends Component {
         this.setState({ secureTextEntry: this.state.secureTextEntry ? false : true })
     }
 
+
+
     async loginRequest() {
-        const { LoginPostRequest } = this.props
+
         const { email, password, is_valide_mail } = this.state
-        if (email == "" || password == "" || password.length < 8) {
-            Alert.alert('Validation failed', 'Phone field cannot be empty', [{ text: 'Okay' }])
-            return
-        }
-        if (!is_valide_mail) {
-            Alert.alert('Validation failed', 'Email is invalid', [{ text: 'Okay' }])
-            return
-        }
-        LoginPostRequest(email, password);
-    }
 
-
-    async loginRequest() {
-        const { email, image1, is_valide_mail } = this.state
-        if (email == "") {
+        if (email == "" || password == "") {
             Alert.alert('Validation failed', 'Email field cannot be empty', [{ text: 'Okay' }])
-            return
-        }
-        if (image1 == "") {
-            Alert.alert('Validation failed', 'Please make sure you select test images', [{ text: 'Okay' }])
             return
         }
         if (!is_valide_mail) {
@@ -106,14 +92,15 @@ export default class SignInScreen extends Component {
             return
         }
         var payload = {
-            Identity: email,
-            image: image1,
+            email: email,
+            password: password,
 
         }
         var formData = JSON.stringify(payload);
 
         this.setState({ loading: true })
-        fetch(baseUrl() + 'verifyface', {
+
+        fetch(baseUrl() + 'accounts/authenticate', {
             method: 'POST', headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -125,7 +112,8 @@ export default class SignInScreen extends Component {
                 console.warn(statusCode, data)
                 this.setState({ loading: false })
                 if (statusCode === 200) {
-                    setToken(email)
+                    setEmail(email)
+                    setToken(data.jwtToken)
                     this.setState({ loading: false, done: true })
                 } else if (statusCode === 500) {
                     alert(data.message)
@@ -151,23 +139,23 @@ export default class SignInScreen extends Component {
         }
         return (
             <ImageBackground
-            source={require('../../assets/background_dot.png')}
-            resizeMode="repeat"
-            style={styles.background}
-          >
+                source={require('../../assets/background_dot.png')}
+                resizeMode="repeat"
+                style={styles.background}
+            >
                 <StatusBar backgroundColor='#fff' barStyle="dark-content" />
                 <Container style={{ backgroundColor: 'transparent' }}>
                     <Content>
                         <View style={styles.backgroundImage}>
                             <View style={styles.mainbody}>
                                 <View style={styles.sideContent}>
-                                <Icon
-                                            name="user"
-                                            size={70}
-                                            type='entypo'
-                                            color={colors.primary_color}
+                                    <Icon
+                                        name="user"
+                                        size={70}
+                                        type='entypo'
+                                        color={colors.primary_color}
 
-                                        />
+                                    />
                                 </View>
                                 <View style={{ marginLeft: 20, marginRight: 20, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginBottom: 5, }}>
 
@@ -175,7 +163,7 @@ export default class SignInScreen extends Component {
                                 </View>
 
                                 <View style={styles.textInputContainer}>
-                                  
+
 
                                     <View style={styles.input}>
                                         <TextInput
@@ -212,6 +200,26 @@ export default class SignInScreen extends Component {
                                     </View>
                                 </View>
 
+                                <View style={styles.textInputContainer}>
+
+
+                                    <View style={styles.input}>
+                                        <TextInput
+                                            placeholder="Password"
+                                            placeholderTextColor={colors.placeholder_color}
+                                            secureTextEntry
+                                            returnKeyType="next"
+                                            onSubmitEditing={() => this.loginRequest()}
+                                            keyboardType='password'
+                                            autoCapitalize="none"
+                                            autoCorrect={false}
+                                            style={{ flex: 1, fontSize: 12, color: colors.primary_color, fontFamily: 'Poppins-SemiBold', }}
+                                            onChangeText={(text) => this.setState({ password: text })}
+                                            onSubmitEditing={() => this.passwordInput.focus()}
+                                        />
+                                    </View>
+                                </View>
+                                {/** 
                                 <View style={{ flexDirection: 'row', marginRight: 30, marginLeft: 30, height: 100, marginTop: 20, marginBottom: 15 }}>
                                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
                                         <ImageBackground
@@ -235,7 +243,7 @@ export default class SignInScreen extends Component {
                                     </View>
                                 </View>
 
-                              
+                              */}
 
                                 <View style={{ marginLeft: 20, marginRight: 20, flexDirection: 'row', marginBottom: 1, }}>
                                     <TouchableOpacity onPress={() => this.props.navigation.navigate('ForgetPassword')} style={{ flex: 1, alignItems: 'center' }}>
@@ -266,14 +274,15 @@ export default class SignInScreen extends Component {
                     {this.state.done ? this.success() : null}
                     {this.state.show_camera ? this.renderCameral() : null}
                 </Container>
-                </ImageBackground>
+            </ImageBackground>
         );
     };
     success() {
         return (
             <Success
-                onPress={() => navigation.replace('Home')}
-                message={'User found and verified'}
+                title={'Verify'}
+                onPress={() => this.props.navigation.navigate('Verify')}
+                message={'User found proceed to verifying its you'}
             />
 
         );
@@ -316,7 +325,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#fff'
-      },
+    },
     backgroundImage: {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
@@ -333,11 +342,11 @@ const styles = StyleSheet.create({
         height: 45,
         borderColor: '#3E3E3E',
         marginBottom: 15,
-        marginTop: 20,
+        marginTop: 10,
         paddingLeft: 12,
         borderWidth: 0.6,
         borderColor: colors.primary_color,
-        borderRadius:40
+        borderRadius: 40
     },
     input: {
         flex: 1,
@@ -363,7 +372,7 @@ const styles = StyleSheet.create({
         width: 128,
         height: 128,
         marginBottom: 12,
-      },
+    },
     actionbutton: {
         marginTop: 7,
         marginBottom: 2,

@@ -3,7 +3,7 @@ import { StyleSheet, Text, Dimensions, View, TouchableOpacity } from 'react-nati
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements'
 import LinearGradient from 'react-native-linear-gradient';
-
+import color from '../theme/colors';
 const width = Dimensions.get('window').width
 
 
@@ -29,12 +29,12 @@ export default class Success extends React.Component {
     }
 
     render() {
-        const { name, message, onPress } = this.props;
+        const { name, message, onPress, title } = this.props;
         return (
             <View style={styles.backgroundImage} block iconLeft>
                 <View style={{ flex: 1.6 }}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ color: '#FFF', fontSize: 23, marginBottom: 20, fontWeight: '900' }}>Successful </Text>
+                        <Text style={{ color: color.primary_color, fontSize: 23, marginBottom: 20, fontWeight: '900' }}>Successful </Text>
                         <Icon
                                 name="check-circle"
                                 size={180}
@@ -47,11 +47,11 @@ export default class Success extends React.Component {
 
                 <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'center', borderRadius: 15 }}>
                     <View style={{ alignItems: 'center' }}>
-                        <Text style={{ color: '#3AA34E', fontSize: 19, fontWeight: '500' }}> {message} </Text>
+                        <Text style={{ color: color.primary_color, fontSize: 19, fontWeight: '500' }}> {message} </Text>
                     </View>
-                    <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['#4b47b7', '#0f0e43']} style={styles.buttonContainer} block iconLeft>
+                    <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={[color.primary_color, color.primary_color]} style={styles.buttonContainer} block iconLeft>
                         <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }} onPress={onPress}>
-                            <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#fdfdfd', fontSize: 14 }}>Continue</Text>
+                            <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#fdfdfd', fontSize: 14 }}>{title}</Text>
                         </TouchableOpacity>
                     </LinearGradient>
 

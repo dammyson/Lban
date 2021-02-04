@@ -11,6 +11,8 @@ import {
   Easing,
   AsyncStorage
 } from 'react-native';
+import colors from '../../components/theme/colors'
+import { Icon } from 'react-native-elements';
 
 
 
@@ -49,7 +51,13 @@ export default class Splash extends React.Component {
         style={styles.background}
       >
         <StatusBar backgroundColor='#fff' barStyle="dark-content" />
-        <Image source={require('../../assets/logo.png')} style={styles.image} />
+        <Icon
+            name="user"
+            size={70}
+            type='entypo'
+            color={colors.primary_color}
+
+          />
       </ImageBackground>
     );
   }

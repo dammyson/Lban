@@ -41,25 +41,25 @@ export default class Welcome extends React.Component {
 
   requestMultiplePermission = async () => {
     try {
-        const granted = await PermissionsAndroid.requestMultiple(
-            [
-                PermissionsAndroid.PERMISSIONS.CAMERA,
-                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                //PermissionsAndroid.PERMISSIONS.ACCESS_COURSE_LOCATION,
-                //PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            ]
-        );
-        this.props.navigation.replace('SignIn')
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-         
-        } else {
-            console.warn("Camera permission denied");
-        }
+      const granted = await PermissionsAndroid.requestMultiple(
+        [
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          //PermissionsAndroid.PERMISSIONS.ACCESS_COURSE_LOCATION,
+          //PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        ]
+      );
+      this.props.navigation.replace('SignIn')
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+
+      } else {
+        console.warn("Camera permission denied");
+      }
     } catch (err) {
-        console.warn(err);
+      console.warn(err);
     }
-};
+  };
 
   render() {
     return (
@@ -77,7 +77,7 @@ export default class Welcome extends React.Component {
             color={colors.primary_color}
 
           />
-          <Text style={{ color: colors.primary_color, fontFamily: 'Poppins-Bold', fontSize: 20, marginBottom: 2, marginTop: 2 }}>NAME HERE</Text>
+          <Text style={{ color: colors.primary_color, fontFamily: 'Poppins-Bold', fontSize: 20, marginBottom: 2, marginTop: 2 }}>Staff App</Text>
 
         </View>
         <Animatable.View
@@ -86,19 +86,30 @@ export default class Welcome extends React.Component {
           }]}
           animation="fadeInUpBig"
         >
-          <Text style={[styles.title, {
-            color:colors.white,
-          }]}>Stay connected with everyone!</Text>
-          <Text style={styles.text}>Sign in with account</Text>
-          <View style={styles.button}>
-            <TouchableOpacity onPress={() =>this.requestMultiplePermission()}>
-              <LinearGradient
-                colors={[colors.primary_color, colors.primary_color]}
-                style={styles.signIn}
-              >
-                <Text style={styles.textSign}>Get Started</Text>
-              </LinearGradient>
-            </TouchableOpacity>
+          <View style={{}}>
+            <Text style={[styles.title, {
+              color: colors.primary_color,
+            }]}>Stay connected with everyone!</Text>
+            <Text style={styles.text}>Sign in with account</Text>
+            <View style={styles.button}>
+              <TouchableOpacity onPress={() => this.requestMultiplePermission()}>
+                <LinearGradient
+                  colors={[colors.primary_color, colors.primary_color]}
+                  style={styles.signIn}
+                >
+                  <Text style={styles.textSign}>Login</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.requestMultiplePermission()}>
+                <View
+                  colors={[colors.primary_color, colors.primary_color]}
+                  style={styles.signInTwo}
+                >
+                  <Text style={[styles.textSign, {color:colors.primary_color}]}>Get Started</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
         </Animatable.View>
       </ImageBackground>
@@ -117,7 +128,7 @@ const styles = StyleSheet.create({
 
   },
   header: {
-    flex: 2,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff'
@@ -140,7 +151,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   text: {
-    color:colors.white,
+    color: colors.white,
     marginTop: 5
   },
   image: {
@@ -152,15 +163,26 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   signIn: {
-    height: 60,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
     flexDirection: 'row'
   },
+
+  signInTwo: {
+    marginTop: 10,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    flexDirection: 'row',
+    borderColor:colors.primary_color,
+    borderWidth:1
+  },
   textSign: {
     color: colors.white,
     fontWeight: 'bold',
-    fontSize:20
+    fontSize: 15
   }
 });

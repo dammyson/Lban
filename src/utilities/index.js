@@ -1,9 +1,17 @@
 import { AsyncStorage } from 'react-native';
 
 export const baseUrl = () => {
-    return 'https://facerecogapi.azurewebsites.net/api/facecog/';
+    return 'https://facerecogapi.azurewebsites.net/';
 };
 
+
+
+export const setEmail = (token) => {
+  AsyncStorage.setItem('email', token);
+};
+export const getEmail = async () => {
+  return AsyncStorage.getItem('email')
+};
 
 export const setToken = (token) => {
   AsyncStorage.setItem('access_token', token);
@@ -11,36 +19,11 @@ export const setToken = (token) => {
 export const getToken = async () => {
   return AsyncStorage.getItem('access_token')
 };
-export const setRefresheToken = (token) => {
-  AsyncStorage.setItem('refresh_token', token);
-};
+
 export const getRefresheToken = async () => {
   return AsyncStorage.getItem('refresh_token')
 };
 
-
-export const setIsFirst =  () => {
-  return AsyncStorage.getItem('isFirst')
-};
-export const getIsFirst = async () => {
-  return AsyncStorage.getItem('isFirst')
-};
-
-export const setUserId =  (id) => {
-  AsyncStorage.setItem('user_id', id);
-};
-export const getUserId = async () => {
-  return AsyncStorage.getItem('user_id')
-};
-
-
-export const getPhone = async () => {
-  return AsyncStorage.getItem('phone')
-};
-
-export const getUser = async () => {
-  return AsyncStorage.getItem('user')
-};
 
 export const getLogout = () => {
   try {
