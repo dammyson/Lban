@@ -272,7 +272,6 @@ export default class SignInScreen extends Component {
 
                     </Content>
                     {this.state.done ? this.success() : null}
-                    {this.state.show_camera ? this.renderCameral() : null}
                 </Container>
             </ImageBackground>
         );
@@ -281,7 +280,7 @@ export default class SignInScreen extends Component {
         return (
             <Success
                 title={'Verify'}
-                onPress={() => this.props.navigation.navigate('Verify')}
+                onPress={() => this.props.navigation.replace('Verify')}
                 message={'User found proceed to verifying its you'}
             />
 

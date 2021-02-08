@@ -77,7 +77,7 @@ export default class Welcome extends React.Component {
             color={colors.primary_color}
 
           />
-          <Text style={{ color: colors.primary_color, fontFamily: 'Poppins-Bold', fontSize: 20, marginBottom: 2, marginTop: 2 }}>Staff App</Text>
+          <Text style={{ color: colors.primary_color, fontFamily: 'Poppins-Bold', fontSize: 20, marginBottom: 2, marginTop: 2 }}>LBAN</Text>
 
         </View>
         <Animatable.View

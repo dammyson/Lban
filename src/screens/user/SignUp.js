@@ -93,10 +93,10 @@ export default class SignInScreen extends Component {
             firstName: fname,
             fastName: lname,
             email: email,
-            password: phone,
+            password: password,
             PhoneNumber: phone,
             Identity: email,
-            confirmPassword: phone,
+            confirmPassword: password,
             TrainingImage1: image1,
             TrainingImage2: image2
 
