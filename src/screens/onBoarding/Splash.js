@@ -51,13 +51,7 @@ export default class Splash extends React.Component {
         style={styles.background}
       >
         <StatusBar backgroundColor='#fff' barStyle="dark-content" />
-        <Icon
-            name="user"
-            size={70}
-            type='entypo'
-            color={colors.primary_color}
-
-          />
+        <Image source={require('../../assets/logo_ni.png')} style={styles.image} />
       </ImageBackground>
     );
   }
@@ -76,9 +70,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   image: {
-    width: 128,
-    height: 128,
+    width: 100,
+    height: 100,
     marginBottom: 12,
+    resizeMode:'contain'
   },
   container: {
     flex: 1,

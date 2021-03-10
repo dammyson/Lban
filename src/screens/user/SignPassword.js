@@ -17,7 +17,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Icon } from 'react-native-elements';
 import LottieView from 'lottie-react-native';
 import colors from '../../components/theme/colors'
-import { Container, Content } from 'native-base';
+import { Container, Content, Toast } from 'native-base';
 import Success from '../../components/views/Success';
 import CameraView from '../../components/CameraView';
 import { baseUrl, setToken, setRefresheToken, setIsFirst, setUserId, processResponse } from '../../utilities';
@@ -67,6 +67,11 @@ export default class SignPassword extends Component {
                 this.setState({ loading: false })
                 if (statusCode === 200) {
                     this.setState({ loading: false,})
+                    Toast.show({
+                        text: "Email was verified!",
+                        buttonText: "Okay",
+                        duration: 3000
+                      })
                     this.props.navigation.replace('SignIn')
                 } else if (statusCode === 500) {
                     alert(data.message)
@@ -122,7 +127,7 @@ export default class SignPassword extends Component {
                                     <TextInput
                                         style={styles.textArea}
                                         underlineColorAndroid="transparent"
-                                        placeholder="Family Background"
+                                        placeholder="Token Background"
                                         placeholderTextColor={colors.placeholder_color}
                                         numberOfLines={5}
                                         multiline={true}
@@ -153,7 +158,6 @@ export default class SignPassword extends Component {
 
 
                     </Content>
-                    {this.state.show_camera ? this.renderCameral() : null}
                 </Container>
 
             </View>
@@ -168,33 +172,6 @@ export default class SignPassword extends Component {
             />
 
         );
-    }
-
-    renderCameral() {
-        return (
-            <CameraView
-                onCapture={(ref) => this.onCapture(ref)}
-                onClose={() => this.setState({ show_camera: false })}
-
-            />
-
-        );
-    }
-    onCapture(ref) {
-        this.setState({ show_camera: false })
-        let proper_img = 'data:image/jpg;base64,' + ref
-        const { image_no } = this.state
-        if (image_no == 1) {
-            this.setState({
-                image1: ref,
-                image1_display: proper_img
-            })
-        } else {
-            this.setState({
-                image2: ref,
-                image2_display: proper_img
-            })
-        }
     }
 
 }

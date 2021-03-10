@@ -17,7 +17,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Icon } from 'react-native-elements';
 import LottieView from 'lottie-react-native';
 import colors from '../../components/theme/colors'
-import { Container, Content } from 'native-base';
+import { Container, Content, Toast } from 'native-base';
 import Success from '../../components/views/Success';
 import CameraView from '../../components/CameraView';
 import { baseUrl, setToken, setRefresheToken, setIsFirst, setUserId, processResponse } from '../../utilities';
@@ -41,6 +41,7 @@ export default class SignInScreen extends Component {
             image1_display: '',
             image2: '',
             password:'',
+            confirm_password:'',
             image2_display: '',
             is_valide_mail: false,
             secureTextEntry: false,
@@ -117,8 +118,13 @@ export default class SignInScreen extends Component {
                 this.setState({ loading: false })
                 if (statusCode === 200) {
                     setToken(email)
+                    Toast.show({
+                        text: "Registration Complete proceed to email verification",
+                        buttonText: "Okay",
+                        duration: 3000
+                      })
                     this.setState({ loading: false,})
-                    this.props.navigation.replace('SignIn')
+                    this.props.navigation.replace('SignPassword')
                 } else if (statusCode === 500) {
                     alert(data.message)
                 } else if (statusCode === 400) {
@@ -174,7 +180,7 @@ export default class SignInScreen extends Component {
 
                                 </View>
 
-                                <View style={{ marginLeft: 20, marginRight: 20, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginBottom: 5, }}>
+                                <View style={{ marginLeft: 20, marginRight: 20, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginBottom: 5,marginTop:50 }}>
 
                                     <Text style={{ color: colors.primary_color, fontFamily: 'Poppins-Bold', fontSize: 16, marginBottom: 2, marginTop: 2 }}>  Sign UP</Text>
                                 </View>
@@ -251,6 +257,26 @@ export default class SignInScreen extends Component {
                                           autoCorrect={false}
                                           style={{ flex: 1, fontSize: 12, color: colors.primary_color, fontFamily: 'Poppins-SemiBold', }}
                                           onChangeText={(text) => this.setState({password: text})}
+                                          onSubmitEditing={() => this.passwordInput.focus()}
+                                      />
+                                  </View>
+                              </View>
+
+                              <View style={styles.textInputContainer}>
+                                  
+
+                                  <View style={styles.input}>
+                                      <TextInput
+                                          placeholder="Confirm Password"
+                                          placeholderTextColor={colors.placeholder_color}
+                                          secureTextEntry
+                                          returnKeyType="next"
+                                          onSubmitEditing={() => this.loginRequest()}
+                                          keyboardType='password'
+                                          autoCapitalize="none"
+                                          autoCorrect={false}
+                                          style={{ flex: 1, fontSize: 12, color: colors.primary_color, fontFamily: 'Poppins-SemiBold', }}
+                                          onChangeText={(text) => this.setState({confirm_password: text})}
                                           onSubmitEditing={() => this.passwordInput.focus()}
                                       />
                                   </View>
@@ -459,7 +485,7 @@ const styles = StyleSheet.create({
         marginLeft: 30,
         height: 42,
         borderColor: '#3E3E3E',
-        marginBottom: 15,
+        marginBottom: 5,
         marginTop: 10,
         paddingLeft: 12,
         borderWidth: 0.6,
@@ -512,3 +538,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
+//[14:20, 2/4/2021] +234 809 393 3359: lanrex52@gmail.com
+//my-super-secret-password

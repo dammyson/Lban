@@ -98,6 +98,56 @@ export default class Verify extends Component {
 
 
 
+    async clockIn() {
+
+        const { email, password, is_valide_mail } = this.state
+
+        if (email == "" || password == "") {
+            Alert.alert('Validation failed', 'Email field cannot be empty', [{ text: 'Okay' }])
+            return
+        }
+        if (!is_valide_mail) {
+            Alert.alert('Validation failed', 'Email is invalid', [{ text: 'Okay' }])
+            return
+        }
+        var payload = {
+            image: image1,
+
+        }
+        var formData = JSON.stringify(payload);
+
+        this.setState({ loading: true })
+
+        fetch(baseUrl() + 'api/facecog/verifyface', {
+            method: 'POST', headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': 'Bearer ' + token,
+            }, body: formData
+        })
+            .then(processResponse)
+            .then(res => {
+                const { statusCode, data } = res;
+                console.warn(statusCode, data)
+                this.setState({ loading: false })
+                if (statusCode === 200) {
+                    // setEmail(email)
+                    // setToken(data.jwtToken)
+                    // this.setState({ loading: false, done: true })
+                } else if (statusCode === 500) {
+                    alert(data.message)
+                } else if (statusCode === 400) {
+                    alert(data.message)
+                } else {
+                    alert(data.message)
+                }
+            })
+            .catch((error) => {
+                this.setState({ loading: false })
+                alert(error.message);
+            });
+    }
+
     render() {
 
         if (this.state.loading) {
@@ -149,12 +199,6 @@ export default class Verify extends Component {
                                 <View style={{ marginLeft: 20, marginRight: 20, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginBottom: 5, }}>
                                     <Text style={{ color: colors.primary_color, fontFamily: 'Poppins-Light', fontSize: 16, marginBottom: 2, }}>Try again</Text>
                                 </View>
-
-
-
-
-
-
                             </View>
                         </View>
 

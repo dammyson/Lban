@@ -9,6 +9,7 @@ import {
     Alert,
     Dimensions,
     Keyboard,
+    Image,
     ImageBackground
 
 } from 'react-native';
@@ -134,7 +135,7 @@ export default class SignInScreen extends Component {
 
         if (this.state.loading) {
             return (
-                <Loader message={'Verifying...'} />
+                <Loader message={'Login...'} />
             );
         }
         return (
@@ -149,13 +150,7 @@ export default class SignInScreen extends Component {
                         <View style={styles.backgroundImage}>
                             <View style={styles.mainbody}>
                                 <View style={styles.sideContent}>
-                                    <Icon
-                                        name="user"
-                                        size={70}
-                                        type='entypo'
-                                        color={colors.primary_color}
-
-                                    />
+                                <Image source={require('../../assets/logo_ni.png')} style={styles.image} />
                                 </View>
                                 <View style={{ marginLeft: 20, marginRight: 20, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginBottom: 5, }}>
 
@@ -287,27 +282,6 @@ export default class SignInScreen extends Component {
         );
     }
 
-    renderCameral() {
-        Keyboard.dismiss()
-        return (
-            <CameraView
-                onCapture={(ref) => this.onCapture(ref)}
-                onClose={() => this.setState({ show_camera: false })}
-
-            />
-
-        );
-    }
-    onCapture(ref) {
-        this.setState({ show_camera: false })
-        let proper_img = 'data:image/jpg;base64,' + ref
-        this.setState({
-            image1: ref,
-            image1_display: proper_img
-        })
-    }
-
-
 }
 
 
@@ -368,9 +342,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     image: {
-        width: 128,
-        height: 128,
-        marginBottom: 12,
+        width: 100,
+    height: 100,
+    marginBottom: 12,
+    resizeMode:'contain'
     },
     actionbutton: {
         marginTop: 7,

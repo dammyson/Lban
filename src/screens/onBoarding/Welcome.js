@@ -14,10 +14,8 @@ import {
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useTheme } from '@react-navigation/native';
 import colors from '../../components/theme/colors'
-import { Icon } from 'react-native-elements';
+
 
 
 
@@ -70,14 +68,8 @@ export default class Welcome extends React.Component {
       >
         <StatusBar backgroundColor='#fff' barStyle="dark-content" />
         <View style={styles.header}>
-          <Icon
-            name="user"
-            size={70}
-            type='entypo'
-            color={colors.primary_color}
-
-          />
-          <Text style={{ color: colors.primary_color, fontFamily: 'Poppins-Bold', fontSize: 20, marginBottom: 2, marginTop: 2 }}>LBAN</Text>
+        <Image source={require('../../assets/logo_ni.png')} style={styles.image} />
+          <Text style={{ color: colors.primary_color, fontFamily: 'Poppins-Bold', fontSize: 20, marginBottom: 2, marginTop: 2 }}>Staff App</Text>
 
         </View>
         <Animatable.View
@@ -155,9 +147,10 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   image: {
-    width: 128,
-    height: 128,
+    width: 100,
+    height: 100,
     marginBottom: 12,
+    resizeMode:'contain'
   },
   button: {
     marginTop: 30,
