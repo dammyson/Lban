@@ -12,14 +12,9 @@ import {
     ImageBackground
 
 } from 'react-native';
-import * as Animatable from 'react-native-animatable';
-import LinearGradient from 'react-native-linear-gradient';
 import { Icon } from 'react-native-elements';
-import LottieView from 'lottie-react-native';
 import colors from '../../components/theme/colors'
 import { Container, Content } from 'native-base';
-import Feather from 'react-native-vector-icons/Feather';
-import { navigation } from '../../../rootNavigation'
 import Success from '../../components/views/Success';
 import CameraView from '../../components/CameraView';
 import Loader from '../../components/loader/Loader';
@@ -40,11 +35,24 @@ export default class Verify extends Component {
             is_valide_mail: false,
             done: false,
             show_camera: true,
+            latitude: 6.5244,
+            longitude: 3.3792,
+
         };
     }
 
     async componentDidMount() {
         this.setState({ token: await getToken() })
+        var cordinates = getLocation();
+        cordinates.then((result) => {
+            this.setState({
+                latitude: result.latitude,
+                longitude: result.longitude
+            });
+            console.log(result);
+        }, err => {
+            console.log(err);
+        });
     }
 
     async verifyRequest(image1) {
@@ -79,7 +87,8 @@ export default class Verify extends Component {
                 console.warn(statusCode, data)
                 this.setState({ loading: false })
                 if (statusCode === 200) {
-                    this.setState({ loading: false, done: true })
+                   
+                    this.clockIn(image1);
                 } else if (statusCode === 500) {
                     alert(data.message)
                 } else if (statusCode === 400) {
@@ -98,24 +107,16 @@ export default class Verify extends Component {
 
 
 
-    async clockIn() {
+    async clockIn(image1) {
 
-        const { email, password, is_valide_mail } = this.state
-
-        if (email == "" || password == "") {
-            Alert.alert('Validation failed', 'Email field cannot be empty', [{ text: 'Okay' }])
-            return
-        }
-        if (!is_valide_mail) {
-            Alert.alert('Validation failed', 'Email is invalid', [{ text: 'Okay' }])
-            return
-        }
+        const {latitude, longitude } = this.state
         var payload = {
             image: image1,
+            longitude:longitude,
+            latitude:latitude
 
         }
         var formData = JSON.stringify(payload);
-
         this.setState({ loading: true })
 
         fetch(baseUrl() + 'api/facecog/verifyface', {
@@ -131,9 +132,7 @@ export default class Verify extends Component {
                 console.warn(statusCode, data)
                 this.setState({ loading: false })
                 if (statusCode === 200) {
-                    // setEmail(email)
-                    // setToken(data.jwtToken)
-                    // this.setState({ loading: false, done: true })
+                    this.setState({ loading: false, done: true })
                 } else if (statusCode === 500) {
                     alert(data.message)
                 } else if (statusCode === 400) {
